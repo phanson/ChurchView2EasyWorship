@@ -31,10 +31,10 @@ Normalization
 
 During song transfer, the song lyrics are also put through a case normalization process. The process is as follows for each line of the song:
 
-  # The line is trimmed of excess white space.
-  # The entire line is converted to lower-case.
-  # The first letter is converted to upper-case.
-  # The following words are capitalized wherever and in whatever form they appear: Jesus, God, King, I, Lord, You, Him, Spirit, Zion, King of Kings, Lord of Lords, Ancient of Days, Jireh, Nissi, Shalom, Rock of Ages, and Emmanuel
+  1. The line is trimmed of excess white space.
+  1. The entire line is converted to lower-case.
+  1. The first letter is converted to upper-case.
+  1. The following words are capitalized wherever and in whatever form they appear: Jesus, God, King, I, Lord, You, Him, Spirit, Zion, King of Kings, Lord of Lords, Ancient of Days, Jireh, Nissi, Shalom, Rock of Ages, and Emmanuel
 
 Development
 -----------

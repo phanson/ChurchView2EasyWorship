@@ -23,17 +23,16 @@ namespace ChurchView2EasyWorship
             { "Verse4", SongPart.Verse4 }
         };
 
-        static List<string> y = new List<string> {
-            "Jesus", "God", "King", "I", "Lord", "You", "Your", "He", "His", "Him", "Spirit",
-            "Zion", "King of Kings", "Lord of Lords", "Ancient of Days", "Jireh", "Nissi", "Shalom",
-            "Rock of Ages", "Emmanuel"
-        };
-
         static void Main(string[] args)
         {
             // set up variables with default values
             string dbName = ConfigurationManager.AppSettings["DefaultDbName"];
             string folderName = ConfigurationManager.AppSettings["DefaultFolderName"];
+
+            // set up capitalized word list
+            List<string> capitalizedWords = new List<string>();
+            foreach (var word in ConfigurationManager.AppSettings["CapitalizedWordList"].Split(','))
+                capitalizedWords.Add(word.Trim());
 
             // prepare for songs
             List<Song> songs = new List<Song>();
@@ -76,7 +75,7 @@ namespace ChurchView2EasyWorship
 
                         for (int i = 1; i < reader.FieldCount; i++)
                             if ((!reader.IsDBNull(i)) && (!string.IsNullOrWhiteSpace(reader.GetString(i))))
-                                currSong.Parts.Add(x[reader.GetName(i)], Normalize(reader.GetString(i), y));
+                                currSong.Parts.Add(x[reader.GetName(i)], Normalize(reader.GetString(i), capitalizedWords));
 
                         songs.Add(currSong);
                     }
@@ -90,7 +89,8 @@ namespace ChurchView2EasyWorship
         /// <summary>
         /// Returns a case-normalized version of the given string.
         /// </summary>
-        /// <param name="input"></param>
+        /// <param name="input">The unmodified input.</param>
+        /// <param name="capWords">List of words that must be capitalized.</param>
         private static string Normalize(string input, List<string> capWords)
         {
             StringBuilder builder = new StringBuilder();
@@ -98,19 +98,27 @@ namespace ChurchView2EasyWorship
             using(StringWriter writer = new StringWriter(builder))
             {
                 string line;
+                // get lines in order
                 while((line=reader.ReadLine()) != null)
                 {
+                    // remove extra whitespace
                     line = line.Trim();
 
+                    // ignore blank lines
                     if (line.Length == 0) continue;
 
+                    // capitalize first letter and convert remainder to lower-case
                     line = line.Substring(0, 1).ToUpper() + Regex.Replace(line.Substring(1).ToLower(), @"\s+", " ");
+                    
+                    // capitalize all words in list
                     foreach (string word in capWords)
                         line = Regex.Replace(line, string.Format(@"\b{0}\b", word), word, RegexOptions.IgnoreCase);
                     
+                    // write modified line
                     writer.WriteLine(line);
                 }
             }
+            // return modified lines as a single string
             return builder.ToString();
         }
 

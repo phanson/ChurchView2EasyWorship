@@ -34,7 +34,7 @@ During song transfer, the song lyrics are also put through a case normalization 
   1. The line is trimmed of excess white space.
   1. The entire line is converted to lower-case.
   1. The first letter is converted to upper-case.
-  1. The following words are capitalized wherever and in whatever form they appear: Jesus, God, King, I, Lord, You, Him, Spirit, Zion, King of Kings, Lord of Lords, Ancient of Days, Jireh, Nissi, Shalom, Rock of Ages, and Emmanuel
+  1. The following words are capitalized wherever and in whatever form they appear: Jesus, God, King, I, Lord, You, Him, Spirit, Zion, King of Kings, Lord of Lords, Ancient of Days, Jireh, Nissi, Shalom, Rock of Ages, and Emmanuel. This list can be changed in the .config file that comes with the executable.
 
 Development
 -----------

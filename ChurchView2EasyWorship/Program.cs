@@ -12,15 +12,15 @@ namespace ChurchView2EasyWorship
 {
     class Program
     {
-        static Dictionary<string, SongParts> x = new Dictionary<string, SongParts> {
-            { "Song", SongParts.Chorus1 },
-            { "Chorus2", SongParts.Chorus2 },
-            { "Chorus3", SongParts.Chorus3 },
-            { "Chorus4", SongParts.Chorus4 },
-            { "Verse1", SongParts.Verse1 },
-            { "Verse2", SongParts.Verse2 },
-            { "Verse3", SongParts.Verse3 },
-            { "Verse4", SongParts.Verse4 }
+        static Dictionary<string, SongPart> x = new Dictionary<string, SongPart> {
+            { "Song", SongPart.Chorus1 },
+            { "Chorus2", SongPart.Chorus2 },
+            { "Chorus3", SongPart.Chorus3 },
+            { "Chorus4", SongPart.Chorus4 },
+            { "Verse1", SongPart.Verse1 },
+            { "Verse2", SongPart.Verse2 },
+            { "Verse3", SongPart.Verse3 },
+            { "Verse4", SongPart.Verse4 }
         };
 
         static void Main(string[] args)
@@ -39,7 +39,8 @@ namespace ChurchView2EasyWorship
                 folderName = args[1];
 
             // ensure database exists
-            // TODO
+            if (!File.Exists(dbName))
+                throw new FileNotFoundException("Could not find database file!", dbName);
 
             // ensure folder exists (or create it)
             if (!Directory.Exists(folderName))
@@ -66,7 +67,7 @@ namespace ChurchView2EasyWorship
                         currSong = new Song(reader.GetString(0));
 
                         for (int i = 1; i < reader.FieldCount; i++)
-                            if (!reader.IsDBNull(i))
+                            if ((!reader.IsDBNull(i)) && (!string.IsNullOrWhiteSpace(reader.GetString(i))))
                                 currSong.Parts.Add(x[reader.GetName(i)], reader.GetString(i));
 
                         songs.Add(currSong);
@@ -78,6 +79,14 @@ namespace ChurchView2EasyWorship
                 song.Serialize(File.Open(Path.Combine(folderName, MakeValidFileName(song.Name + ".txt")), FileMode.OpenOrCreate, FileAccess.Write, FileShare.Write));
         }
 
+        /// <summary>
+        /// Sanitizes input so it can be used as a filename.
+        /// </summary>
+        /// <param name="name">The filename.</param>
+        /// <returns>Sanitized filename.</returns>
+        /// <remarks>
+        /// Lifted verbatim from StackOverflow.
+        /// </remarks>
         private static string MakeValidFileName(string name)
         {
             string invalidChars = Regex.Escape(new string(Path.GetInvalidFileNameChars()));

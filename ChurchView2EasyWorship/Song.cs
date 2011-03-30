@@ -12,19 +12,19 @@ namespace ChurchView2EasyWorship
     /// </summary>
     public class Song
     {
-        private Dictionary<SongParts, string> partNames = new Dictionary<SongParts, string> {
-            { SongParts.Chorus1, "Chorus 1" },
-            { SongParts.Chorus2, "Chorus 2" },
-            { SongParts.Chorus3, "Chorus 3" },
-            { SongParts.Chorus4, "Chorus 4" },
-            { SongParts.Verse1, "Verse 1" },
-            { SongParts.Verse2, "Verse 2" },
-            { SongParts.Verse3, "Verse 3" },
-            { SongParts.Verse4, "Verse 4" }
+        private Dictionary<SongPart, string> partNames = new Dictionary<SongPart, string> {
+            { SongPart.Chorus1, "Chorus 1" },
+            { SongPart.Chorus2, "Chorus 2" },
+            { SongPart.Chorus3, "Chorus 3" },
+            { SongPart.Chorus4, "Chorus 4" },
+            { SongPart.Verse1, "Verse 1" },
+            { SongPart.Verse2, "Verse 2" },
+            { SongPart.Verse3, "Verse 3" },
+            { SongPart.Verse4, "Verse 4" }
         };
 
         public string Name { get; set; }
-        public Dictionary<SongParts, string> Parts { get; set; }
+        public Dictionary<SongPart, string> Parts { get; set; }
 
         /// <summary>
         /// Instantiates a new <see cref="Song"/>.
@@ -33,7 +33,7 @@ namespace ChurchView2EasyWorship
         public Song(string name)
         {
             Name = name;
-            Parts = new Dictionary<SongParts, string>();
+            Parts = new Dictionary<SongPart, string>();
         }
 
         /// <summary>
@@ -58,18 +58,29 @@ namespace ChurchView2EasyWorship
                 foreach (var part in Parts)
                 {
                     writer.WriteLine(partNames[part.Key]);
-                    writer.WriteLine(part.Value);
+                    writer.WriteLine(normalize(part.Value));
+                    writer.WriteLine();
                 }
 
                 writer.WriteLine();
             }
+        }
+
+        /// <summary>
+        /// Performs case normalization on the song lyrics.
+        /// </summary>
+        /// <param name="part">The song part.</param>
+        /// <returns>Normalized lyrics.</returns>
+        private static string normalize(string part)
+        {
+            return part;
         }
     }
 
     /// <summary>
     /// List of song parts.
     /// </summary>
-    public enum SongParts
+    public enum SongPart
     {
         Chorus1,
         Chorus2,

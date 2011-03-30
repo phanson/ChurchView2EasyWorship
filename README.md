@@ -16,8 +16,15 @@ Running
 -------
 
 The following are required to run this program:
- * .NET Framework 4
- * (Possibly) Microsoft Access
+
+  * .NET Framework 4
+  * (Possibly) Microsoft Access
+
+To run it, open a command line and navigate to the folder that holds the .exe file. Execute the following command:
+
+    ChurchView2EasyWorship.exe Database.mdb "Folder Name"
+
+Where the first argument is the song database file name and the second one is the name of the folder you want the files to end up in. Both arguments are optional and default to "Songs.mdb" and "SongsOutput", respectively. There is no option to specify the folder without also specifying the database.
 
 Development
 -----------

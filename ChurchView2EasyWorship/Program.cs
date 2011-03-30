@@ -23,6 +23,12 @@ namespace ChurchView2EasyWorship
             { "Verse4", SongPart.Verse4 }
         };
 
+        static List<string> y = new List<string> {
+            "Jesus", "God", "King", "I", "Lord", "You", "Your", "He", "His", "Him", "Spirit",
+            "Zion", "King of Kings", "Lord of Lords", "Ancient of Days", "Jireh", "Nissi", "Shalom",
+            "Rock of Ages", "Emmanuel"
+        };
+
         static void Main(string[] args)
         {
             // set up variables with default values
@@ -64,11 +70,13 @@ namespace ChurchView2EasyWorship
                     Song currSong;
                     while (reader.Read())
                     {
-                        currSong = new Song(reader.GetString(0));
+                        currSong = new Song(
+                            System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(Regex.Replace(reader.GetString(0).ToLower(), @"\s+", " "))
+                        );
 
                         for (int i = 1; i < reader.FieldCount; i++)
                             if ((!reader.IsDBNull(i)) && (!string.IsNullOrWhiteSpace(reader.GetString(i))))
-                                currSong.Parts.Add(x[reader.GetName(i)], reader.GetString(i));
+                                currSong.Parts.Add(x[reader.GetName(i)], Normalize(reader.GetString(i), y));
 
                         songs.Add(currSong);
                     }
@@ -76,7 +84,34 @@ namespace ChurchView2EasyWorship
             }
 
             foreach (var song in songs)
-                song.Serialize(File.Open(Path.Combine(folderName, MakeValidFileName(song.Name + ".txt")), FileMode.OpenOrCreate, FileAccess.Write, FileShare.Write));
+                song.Serialize(File.Open(Path.Combine(folderName, MakeValidFileName(song.Name + ".txt")), FileMode.Truncate, FileAccess.Write, FileShare.Write));
+        }
+
+        /// <summary>
+        /// Returns a case-normalized version of the given string.
+        /// </summary>
+        /// <param name="input"></param>
+        private static string Normalize(string input, List<string> capWords)
+        {
+            StringBuilder builder = new StringBuilder();
+            using(StringReader reader = new StringReader(input))
+            using(StringWriter writer = new StringWriter(builder))
+            {
+                string line;
+                while((line=reader.ReadLine()) != null)
+                {
+                    line = line.Trim();
+
+                    if (line.Length == 0) continue;
+
+                    line = line.Substring(0, 1).ToUpper() + Regex.Replace(line.Substring(1).ToLower(), @"\s+", " ");
+                    foreach (string word in capWords)
+                        line = Regex.Replace(line, string.Format(@"\b{0}\b", word), word, RegexOptions.IgnoreCase);
+                    
+                    writer.WriteLine(line);
+                }
+            }
+            return builder.ToString();
         }
 
         /// <summary>

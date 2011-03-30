@@ -26,6 +26,16 @@ To run it, open a command line and navigate to the folder that holds the .exe fi
 
 Where the first argument is the song database file name and the second one is the name of the folder you want the files to end up in. Both arguments are optional and default to "Songs.mdb" and "SongsOutput", respectively. There is no option to specify the folder without also specifying the database.
 
+Normalization
+-------------
+
+During song transfer, the song lyrics are also put through a case normalization process. The process is as follows for each line of the song:
+
+  # The line is trimmed of excess white space.
+  # The entire line is converted to lower-case.
+  # The first letter is converted to upper-case.
+  # The following words are capitalized wherever and in whatever form they appear: Jesus, God, King, I, Lord, You, Him, Spirit, Zion, King of Kings, Lord of Lords, Ancient of Days, Jireh, Nissi, Shalom, Rock of Ages, and Emmanuel
+
 Development
 -----------
 

@@ -58,22 +58,12 @@ namespace ChurchView2EasyWorship
                 foreach (var part in Parts)
                 {
                     writer.WriteLine(partNames[part.Key]);
-                    writer.WriteLine(normalize(part.Value));
+                    writer.WriteLine(part.Value);
                     writer.WriteLine();
                 }
 
                 writer.WriteLine();
             }
-        }
-
-        /// <summary>
-        /// Performs case normalization on the song lyrics.
-        /// </summary>
-        /// <param name="part">The song part.</param>
-        /// <returns>Normalized lyrics.</returns>
-        private static string normalize(string part)
-        {
-            return part;
         }
     }
 

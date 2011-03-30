@@ -12,6 +12,17 @@ namespace ChurchView2EasyWorship
     /// </summary>
     public class Song
     {
+        private Dictionary<SongParts, string> partNames = new Dictionary<SongParts, string> {
+            { SongParts.Chorus1, "Chorus 1" },
+            { SongParts.Chorus2, "Chorus 2" },
+            { SongParts.Chorus3, "Chorus 3" },
+            { SongParts.Chorus4, "Chorus 4" },
+            { SongParts.Verse1, "Verse 1" },
+            { SongParts.Verse2, "Verse 2" },
+            { SongParts.Verse3, "Verse 3" },
+            { SongParts.Verse4, "Verse 4" }
+        };
+
         public string Name { get; set; }
         public Dictionary<SongParts, string> Parts { get; set; }
 
@@ -39,7 +50,19 @@ namespace ChurchView2EasyWorship
         /// <param name="s">The stream.</param>
         public void Serialize(Stream s)
         {
-            throw new NotImplementedException();
+            using (var writer = new StreamWriter(s))
+            {
+                writer.WriteLine(Name);
+                writer.WriteLine();
+
+                foreach (var part in Parts)
+                {
+                    writer.WriteLine(partNames[part.Key]);
+                    writer.WriteLine(part.Value);
+                }
+
+                writer.WriteLine();
+            }
         }
     }
 

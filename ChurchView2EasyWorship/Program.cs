@@ -38,6 +38,13 @@ namespace ChurchView2EasyWorship
             if (args.Length > 1)
                 folderName = args[1];
 
+            // ensure database exists
+            // TODO
+
+            // ensure folder exists (or create it)
+            if (!Directory.Exists(folderName))
+                Directory.CreateDirectory(folderName);
+
             // build the connection string
             DbConnectionStringBuilder builder = new DbConnectionStringBuilder();
             builder.ConnectionString = ConfigurationManager.ConnectionStrings["Access"].ConnectionString;
@@ -68,7 +75,7 @@ namespace ChurchView2EasyWorship
             }
 
             foreach (var song in songs)
-                song.Serialize(File.OpenWrite(Path.Combine(folderName, MakeValidFileName(song.Name))));
+                song.Serialize(File.Open(Path.Combine(folderName, MakeValidFileName(song.Name + ".txt")), FileMode.OpenOrCreate, FileAccess.Write, FileShare.Write));
         }
 
         private static string MakeValidFileName(string name)
